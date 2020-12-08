@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student index{% endblock %}
+
+{% block body %}
+    <h1>Student index</h1>
+    <input class="form-control" id="name" name="name" type="text"> <br>
+    <input class="btn btn-primary" onclick="send()" type="submit" value="Find by name">
+
+    <script>
+        function send() {
+            let name = document.getElementById("name").value;
+            let url = 'http://localhost:8000/Student';
+            if(name !== undefined && name !== ''){
+                url = `http://localhost:8000/Student/find/${name}`;
+            }
+                window.location = url;
+            
+        }
+    </script>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>AVG Ball</th>
+                <th>Teacher</th>
+                <th>Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for Student in Students %}
+            <tr>
+                <td>{{ Student.id }}</td>
+                <td>{{ Student.name }}</td>
+                <td>{{ Student.average }}</td>
+                <td>{{ Student.teacher }}</td>
+                <td>
+                    <a href="{{ path('Student_show', {'id': Student.id}) }}">show</a>
+                    <a href="{{ path('Student_edit', {'id': Student.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('Student_new') }}">Create new</a>
+{% endblock %}
